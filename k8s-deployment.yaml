@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: static-site
-          image: shivsoftapp/static-site:latest
+          image: adminleena/static-site:latest
           ports:
             - containerPort: 80
 ---
