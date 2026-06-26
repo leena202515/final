@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    IMAGE = "shivsoftapp/static-site"
+    IMAGE = "final/static-site"
     TAG = "latest"
   }
 
@@ -11,7 +11,7 @@ pipeline {
     stage('Checkout Code') {
       steps {
         git branch: 'main',
-            url: 'https://github.com/shivnathyadav73/static-website.git'
+            url: 'https://github.com/leena202515/final.git'
       }
     }
 
@@ -25,7 +25,7 @@ pipeline {
       steps {
         withCredentials([
           usernamePassword(
-            credentialsId: 'dockerhub',
+            credentialsId: 'dockerhub-creds',
             usernameVariable: 'DOCKER_USER',
             passwordVariable: 'DOCKER_PASS'
           )
