@@ -25,13 +25,18 @@ pipeline {
       steps {
         withCredentials([
           usernamePassword(
-            credentialsId: 'dockerhub-creds',
-            usernameVariable: 'adminleena',
-            passwordVariable: 'DOCKER_PASS'
-          )
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
         ]) {
-          sh 'echo $env:DOCKER_PASS | docker login -u $env:DOCKER_USER --password-stdin'
-          sh "docker push ${IMAGE}:${TAG}"
+           sh '''
+                    set -e
+
+                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+                    docker push $IMAGE_NAME:$IMAGE_TAG
+                    '''
         }
       }
     }
