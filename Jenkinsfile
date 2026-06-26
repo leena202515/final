@@ -44,12 +44,16 @@ pipeline {
 
     stage('Deploy to Kubernetes') {
       steps {
-        withCredentials([
-          file(credentialsId: 'kubeconfig_cred', variable: 'KCFG')
-        ]) {
-          sh "(Get-Content k8s-deployment.yaml) -replace 'DOCKERHUB_USERNAME/static-site:latest', '${IMAGE}:${TAG}' | Set-Content k8s-deployment.yaml"
-          sh "kubectl --kubeconfig=$env:KCFG apply -f k8s-deployment.yaml"
-          sh "kubectl --kubeconfig=$env:KCFG rollout status deployment/static-site-deploy"
+        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+            sh '''
+                export KUBECONFIG=$KUBECONFIG
+
+                kubectl version --client
+                kubectl get nodes
+
+                kubectl apply -f deployment.yaml
+                kubectl apply -f service.yaml
+            '''
         }
       }
     }
